@@ -12,9 +12,11 @@ public class Controller {
     static public String loadTxtFile(File file) {
         return model.parseFileFor13Digits(file);
     }
+
     static public String loadXlsFile(File file) {
         return model.setNameOutput(file);
     }
+
     static public String moveResultToXLS() throws IOException {
         return model.writeXLSFile();
     }
