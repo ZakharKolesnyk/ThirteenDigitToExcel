@@ -2,6 +2,7 @@ package com.gmail.kolesnyk.zakhar.model;
 
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
@@ -15,13 +16,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Model {
-    private final static String nameOutput = "output.xls";
+    private String nameOutput;
     private List<String> list13Digits;
 
 
-    public void parseFileFor13Digits(File file) {
+    public String parseFileFor13Digits(File file) {
         if (file == null) {
-            return;
+            return null;
+        }
+        if (!FilenameUtils.getExtension(file.getName()).toLowerCase().equals("txt")) {
+            return "invalid type of file";
         }
         list13Digits = new ArrayList<String>();
         try {
@@ -36,11 +40,12 @@ public class Model {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+        return file.getAbsolutePath();
     }
 
-    public void writeXLSFile() throws IOException {
-        if (list13Digits == null) {
-            throw new IllegalArgumentException("Input File not loaded before");
+    public String writeXLSFile() throws IOException {
+        if (list13Digits == null || nameOutput == null) {
+            return "Files not loaded";
         }
         FileInputStream inputStream = new FileInputStream(nameOutput);
         HSSFWorkbook book = new HSSFWorkbook(inputStream);
@@ -51,9 +56,16 @@ public class Model {
             System.out.println(s);
             myExcelSheet.createRow(++pointer).createCell(0).setCellValue(s);
         }
-        FileOutputStream outputStream=new FileOutputStream(nameOutput);
+        FileOutputStream outputStream = new FileOutputStream(nameOutput);
         book.write(outputStream);
         outputStream.close();
-        System.exit(0);
+        return null;
+    }
+
+    public String setNameOutput(File file) {
+        if (!FilenameUtils.getExtension(file.getName()).toLowerCase().equals("xls")) {
+            return "invalid type of file";
+        }
+        return this.nameOutput = file.getAbsolutePath();
     }
 }

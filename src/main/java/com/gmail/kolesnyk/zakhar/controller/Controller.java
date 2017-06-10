@@ -9,10 +9,13 @@ import java.io.IOException;
 public class Controller {
     private static Model model = new Model();
 
-    static public void loadFile(File file) {
-        model.parseFileFor13Digits(file);
+    static public String loadTxtFile(File file) {
+        return model.parseFileFor13Digits(file);
     }
-    static public void moveResultToXLS() throws IOException {
-        model.writeXLSFile();
+    static public String loadXlsFile(File file) {
+        return model.setNameOutput(file);
+    }
+    static public String moveResultToXLS() throws IOException {
+        return model.writeXLSFile();
     }
 }
